@@ -42,12 +42,20 @@ class App extends Component {
     })
   }
 
-  deletePost() {
-
+  deletePost(postId) {
+    axios.delete(`${baseUrl}/posts?id=${postId}`).then( results => {
+      this.setState({
+        posts: results.data
+      })
+    })
   }
 
-  createPost() {
-
+  createPost(text) {
+    axios.post(`${baseUrl}/posts`, {text}).then( results => {
+      this.setState({
+        posts: results.data
+      })
+    })
   }
 
   render() {
@@ -59,10 +67,12 @@ class App extends Component {
 
         <section className="App__content">
 
-          <Compose />
+          <Compose createPost={this.createPost}/>
 
           {this.state.posts.map( (post) => {
-            return <Post id={post.id} 
+            return <Post 
+            deletePostFn={this.deletePost}
+            id={post.id} 
             updatePostFn={this.updatePost} 
             text={post.text} 
             date={post.date} 
